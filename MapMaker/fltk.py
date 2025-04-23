@@ -121,9 +121,10 @@ class CustomCanvas:
         "Deplacement": "<Motion>",
         "Touche": "<Key>",
         "Redimension": "<Configure>",
+        "Scroll" : "<MouseWheel>",
     }
 
-    _default_ev = ["ClicGauche", "ClicDroit", "Touche"]
+    _default_ev = ["ClicGauche", "ClicDroit", "Touche","Scroll"]
 
     def __init__(
             self,
@@ -875,10 +876,17 @@ def capture_ecran(file: str) -> None:
 
     # Convert .ps to .png using ImageMagick's convert command
     subprocess.call([
-    "convert", "-resize", "150x150",  # Resize to specific dimensions (you can adjust the size)
-    "-background", "white", "-flatten", file + ".ps", file + ".png"
-])
+    "C:\Program Files\ImageMagick-7.1.1-Q16-HDRI\magick.exe",
+    "-density", "150",
+    file + ".ps",
+    "-background", "white",
+    "-flatten",
+    "-geometry", "100%",
+    file + ".png"
+],shell=True)
 
+    #psimage=Image.open(file+'.ps')
+    #psimage.save(file+'.png')
     # Remove the .ps file (cross-platform)
     try:
         os.remove(file + ".ps")
