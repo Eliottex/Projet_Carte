@@ -19,14 +19,15 @@ def afficher_tuiles(liste_num,liste_tuiles,larg_car,long_car,nbr_car):
 
     """
     
-    fltk.efface_tout()
+    #fltk.efface_tout()
     #print(liste_tuiles,len(liste_tuiles))
     for x in range(len(liste_num)):
         for y in range(len(liste_num[x])):
             num_ligne = liste_num[x][y][1]
             num_colon = liste_num[x][y][0]
             if 10*num_colon+num_ligne < len(liste_tuiles):
-                fltk.image(y*larg_car , x*long_car , "tuiles/"+liste_tuiles[nbr_car*num_colon+num_ligne], long_car, larg_car, ancrage='nw', tag='image'+str(num_ligne)+str(num_colon))   
+                fltk.rectangle(100,100,700,700,couleur="Pink",remplissage="Pink")
+                #fltk.image(y*larg_car , x*long_car , "tuiles/"+liste_tuiles[nbr_car*num_colon+num_ligne], long_car, larg_car, ancrage='nw', tag='image'+str(num_ligne)+str(num_colon))   
 
     quad(nbr_carreau,longueur,largeur,long_carreau,larg_carreau)
 
@@ -53,14 +54,14 @@ def afficher_carte(nbr_car,long,larg,long_car,larg_car):
     quad(nbr_car,long,larg,long_car,larg_car)
     for x in range(len(list_image)):
         for y in range(len(list_image[x])):
-            if list_image[x][y]!='Vide':
+            if list_image[x][y]!=None:
                 fltk.image(y*larg_car , x*long_car , "tuiles/"+list_image[x][y], long_car, larg_car, ancrage='nw', tag='image'+str(y)+str(x))   
 
 
 
 
 #liste dans laquelle sera retenue l'occupation de chaque case
-list_image=[['Vide' for x in range(nbr_carreau)] for y in range(nbr_carreau)]
+list_image=[[None for x in range(nbr_carreau)] for y in range(nbr_carreau)]
 
 
 #création d'un mode permettant d'alterner entre le choix de la case et le choix de la tuile pour la case
@@ -72,11 +73,14 @@ while True:
     ev = fltk.donne_ev()
     tev = fltk.type_ev(ev)
 
-    if tev== "Scroll":
+    if tev== "Scroll" or tev=="Up" or tev=="Down":
         if mode == 'choisir_tuile':
-
-            direction = int(fltk.attribut(ev,"delta")/120)
-
+            if tev=="Scroll":
+                direction = int(fltk.attribut(ev,"delta")/120)
+            elif tev=="Up":
+                direction=1
+            elif tev=="Down":
+                direction=-1
             #scroll vers le haut en déalant les images
             if liste_num_affichage[0][0][0]!=0 and direction == 1:
                 for x in range(len(liste_num_affichage)):
@@ -105,19 +109,19 @@ while True:
 
             #vérifie si il y a une case sur les côtés, si oui elle retiens le raccord nécessaire
             if num_lig-1 >=0:
-                gauche = list_image[num_col][num_lig-1][1] if list_image[num_col][num_lig-1]!='Vide' else '0' 
+                gauche = list_image[num_col][num_lig-1][1] if list_image[num_col][num_lig-1]!=None else '0' 
             else :
                 gauche = '0'
             if num_lig+1 <len(list_image[0]):
-                droite = list_image[num_col][num_lig+1][3] if list_image[num_col][num_lig+1]!='Vide' else '0' 
+                droite = list_image[num_col][num_lig+1][3] if list_image[num_col][num_lig+1]!=None else '0' 
             else :
                 droite = '0'
             if num_col-1 >=0:
-                haut = list_image[num_col-1][num_lig][2] if list_image[num_col-1][num_lig]!='Vide' else '0' 
+                haut = list_image[num_col-1][num_lig][2] if list_image[num_col-1][num_lig]!=None else '0' 
             else :
                 haut = '0'
             if num_col+1 <len(list_image):
-                bas = list_image[num_col+1][num_lig][0] if list_image[num_col+1][num_lig]!='Vide' else '0' 
+                bas = list_image[num_col+1][num_lig][0] if list_image[num_col+1][num_lig]!=None else '0' 
             else :
                 bas = '0'
 
@@ -171,7 +175,7 @@ while True:
             #Efface l'image graphiquement
             fltk.efface('image'+str(x_sup)+str(y_sup))
             #Efface la tuile dans la liste
-            list_image[y_sup][x_sup]='Vide'
+            list_image[y_sup][x_sup]=None
 
 
     if tev == "Touche":

@@ -122,9 +122,11 @@ class CustomCanvas:
         "Touche": "<Key>",
         "Redimension": "<Configure>",
         "Scroll" : "<MouseWheel>",
+        "Up" : "<Button-4>",
+        "Down" : "<Button-5>",
     }
 
-    _default_ev = ["ClicGauche", "ClicDroit", "Touche","Scroll"]
+    _default_ev = ["ClicGauche", "ClicDroit", "Touche","Scroll","Up","Down"]
 
     def __init__(
             self,
