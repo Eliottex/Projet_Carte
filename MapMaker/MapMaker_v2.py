@@ -3,12 +3,12 @@ import fltk
 import os
 import random
 
-longueur=800
+hauteur=800 
 largeur=800
-fltk.cree_fenetre(largeur,longueur)
+fltk.cree_fenetre(largeur,hauteur)
 nbr_carreau=10
-long_carreau=int(longueur/nbr_carreau)
-larg_carreau=int(largeur/nbr_carreau)
+long_carreau=int(hauteur/nbr_carreau)
+larg_carreau=int(largeur/nbr_carreau)                                                                
 
 
 liste_tuiles = os.listdir( 'tuiles/' )
@@ -18,7 +18,7 @@ def afficher_tuiles(liste_num,liste_tuiles,larg_car,long_car,nbr_car):
     
 
     """
-    
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
     fltk.efface_tout()
     #print(liste_tuiles,len(liste_tuiles))
     for x in range(len(liste_num)):
@@ -26,9 +26,9 @@ def afficher_tuiles(liste_num,liste_tuiles,larg_car,long_car,nbr_car):
             num_ligne = liste_num[x][y][1]
             num_colon = liste_num[x][y][0]
             if 10*num_colon+num_ligne < len(liste_tuiles):
-                fltk.image(y*larg_car , x*long_car , "tuiles/"+liste_tuiles[nbr_car*num_colon+num_ligne], long_car, larg_car, ancrage='nw', tag='image'+str(num_ligne)+str(num_colon))   
+                fltk.image(y*long_car , x*larg_car , "tuiles/"+liste_tuiles[nbr_car*num_colon+num_ligne], long_car, larg_car, ancrage='nw', tag='image'+str(num_ligne)+str(num_colon))   
 
-    quad(nbr_carreau,longueur,largeur,long_carreau,larg_carreau)
+    quad(nbr_carreau,hauteur,largeur,long_carreau,larg_carreau)
 
 
 def quad(nbr_carreaux,long_fenetre,larg_fenetre,long_car,larg_car):
@@ -66,7 +66,7 @@ list_image=[['Vide' for x in range(nbr_carreau)] for y in range(nbr_carreau)]
 #création d'un mode permettant d'alterner entre le choix de la case et le choix de la tuile pour la case
 mode='choisir_case'
 
-quad(nbr_carreau,longueur,largeur,long_carreau,larg_carreau)
+quad(nbr_carreau,hauteur,largeur,long_carreau,larg_carreau)
 
 while True:
     ev = fltk.donne_ev()
@@ -155,7 +155,7 @@ while True:
                 list_image[num_col][num_lig]=case    
 
                 #Et on réaffiche toutes les cases avec la liste modifiée juste avant
-                afficher_carte(nbr_carreau,longueur,largeur,long_carreau,larg_carreau)
+                afficher_carte(nbr_carreau,hauteur,largeur,long_carreau,larg_carreau)
 
                 #On rechange le mode pour choisir une nouvelle case
                 mode = 'choisir_case'
