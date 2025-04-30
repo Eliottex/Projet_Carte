@@ -2,6 +2,7 @@ print('Hello World !')
 import fltk
 import os
 import random
+import time
 
 hauteur=800 
 largeur=800
@@ -15,6 +16,9 @@ decalage_larg=larg_carreau -20
 
 
 liste_tuiles = os.listdir( 'tuiles/' )
+liste_tuiles = [nom[:-4] for nom in liste_tuiles if nom.endswith('.png') and len(nom[:-4]) == 4]
+
+
 
 def afficher_tuiles(liste_num,liste_tuiles,larg_car,haut_car,nbr_car):
     """Affiche les tuiles possibles pour la case cliquée.
@@ -59,7 +63,7 @@ def afficher_carte(nbr_car,long,larg,long_car,larg_car):
     for x in range(len(list_image)):
         for y in range(len(list_image[x])):
             if list_image[x][y]!=None:
-                fltk.image(y*larg_car , x*long_car , "tuiles/"+list_image[x][y], long_car, larg_car, ancrage='nw', tag='image'+str(y)+str(x))   
+                fltk.image(y*larg_car , x*long_car , "tuiles/"+list_image[x][y] + ".png", long_car, larg_car, ancrage='nw', tag='image'+str(y)+str(x))   
 
 
 
@@ -72,6 +76,127 @@ list_image=[[None for x in range(nbr_carreau)] for y in range(nbr_carreau)]
 mode='choisir_case'
 
 quad(nbr_carreau,hauteur,largeur,haut_carreau,larg_carreau)
+
+"""partie de nesma A PAS TOUCHER"""
+def case_vide(grille):
+    lst = []
+    for i in range(len(grille)):
+        for j in range(len(grille[0])):
+            if grille[i][j] is None :
+                lst.append((i,j))
+    return lst
+
+def emplacement_valide(grille, i, j, tuile):
+    haut, droite, bas, gauche = tuile
+    #dessus
+    if i > 0 and grille[i-1][j] is not None:
+        tuile_voisine = grille[i-1][j]
+        if tuile_voisine[2] != haut:
+            return False
+
+    #dessous
+    if i < len(grille) - 1 and grille[i+1][j] is not None:
+        tuile_voisine = grille[i+1][j]
+        if tuile_voisine[0] != bas:
+            return False
+    
+    #gauche
+    if j > 0 and grille[i][j-1] is not None:
+        tuile_voisine = grille[i][j-1]
+        if tuile_voisine[1] != gauche:
+            return False
+    
+    #droite
+    if j < len(grille[0])-1 and grille[i][j+1] is not None:
+        tuile_voisine = grille[i][j+1]
+        print("ui")
+        if tuile_voisine[3] != droite:
+            return False
+    return True
+
+def tuiles_possibles(grille,i,j): # i -> colonne; j -> ligne;
+    #vérifie si il y a une case sur les côtés, si oui elle retiens le raccord nécessaire
+    if j-1 >=0:
+        gauche = grille[i][j-1][1] if grille[i][j-1]!=None else '0' 
+    else :
+        gauche = '0'
+    if j+1 <len(grille[0]):
+        droite = grille[i][j+1][3] if grille[i][j+1]!=None else '0' 
+    else :
+        droite = '0'
+    if i-1 >=0:
+        haut = grille[i-1][j][2] if grille[i-1][j]!=None else '0' 
+    else :
+        haut = '0'
+    if i+1 <len(grille):
+        bas = grille[i+1][j][0] if grille[i+1][j]!=None else '0' 
+    else :
+        bas = '0'
+
+    #recherche l'ensemble des cases qui correspondent aux critères demandés
+    list_valide=[]
+    for tuile in liste_tuiles:
+        if (tuile[3]==gauche or gauche=='0') and (tuile[1]==droite or droite=='0') and (tuile[0]==haut or haut=='0') and (tuile[2]==bas or bas=='0'):
+            list_valide.append(tuile)
+
+    return list_valide
+
+
+def solveur(grille):
+    vide = case_vide(grille)
+    if not vide:
+        return True
+    i, j = vide[0]
+    tuiles = tuiles_possibles(grille,i,j)
+    for tuile in tuiles:
+        grille[i][j] = tuile
+        if solveur(grille):
+            return True
+        grille[i][j] = None
+    
+    return False
+
+def case_plus_contrainte(grille):
+    minimum = None
+    meilleure_case = None
+
+    for i in range (len(grille)):
+        for j in range(len(grille[0])):
+            if grille[i][j] == None:
+                possibilites  = tuiles_possibles(grille,i,j)
+                nombre = len(possibilites)
+                if nombre == 0:
+                    return(i,j,[])
+                if minimum == None or nombre < minimum:
+                    minimum = nombre
+                    meilleure_case =(i,j,possibilites)
+    return meilleure_case
+
+
+def solveur2(grille):
+    case = case_plus_contrainte(grille)
+    if case is None:
+        return True  # Tout est rempli
+
+    i, j, tuiles = case
+    random.shuffle(tuiles)  # Mélange les tuiles pour que la sélection soit aléatoire
+
+    for tuile in tuiles:
+        grille[i][j] = tuile
+        fltk.image(j * larg_carreau, i * haut_carreau, "tuiles/" + tuile + ".png", haut_carreau, larg_carreau, ancrage='nw', tag='image'+str(j)+str(i))
+        fltk.mise_a_jour()
+        time.sleep(0.01)  # Ajoute une petite pause pour visualiser les changements
+
+        if solveur2(grille):
+            return True
+        grille[i][j] = None
+        fltk.efface('image'+str(j)+str(i))
+        fltk.mise_a_jour()
+
+    return False
+
+
+"""fin partie Nesma bisous"""
 
 while True:
     ev = fltk.donne_ev()
@@ -186,12 +311,19 @@ while True:
         touche_ev = fltk.touche(ev)
         
         if touche_ev == "l":
-
-            
-            num_col=fltk.ordonnee_souris()//haut_carreau
-            num_lig=fltk.abscisse_souris()//larg_carreau
-            
+            num_col = fltk.ordonnee_souris() // haut_carreau
+            num_lig = fltk.abscisse_souris() // larg_carreau
             print(list_image[num_col][num_lig])
+
+        elif touche_ev == "s":
+            print("solveur lancé")
+            if solveur2(list_image):
+                print("carte complétée")
+                afficher_carte(nbr_carreau, hauteur, largeur, haut_carreau, larg_carreau)
+            else:
+                print("impossible de compléter la carte")
+                fltk.texte(largeur//2, hauteur - 20, "carte impossible à compléter", taille=16, couleur='red', ancrage='center')
+
 
     if tev == "Quitte":
 
@@ -199,4 +331,6 @@ while True:
         fltk.ferme_fenetre()
         break
     
+
+
     fltk.mise_a_jour()
