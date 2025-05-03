@@ -11,7 +11,8 @@ nbr_carreau=10
 haut_carreau=int(hauteur/nbr_carreau)
 larg_carreau=int(largeur/nbr_carreau)                                                                
 decalage_haut=haut_carreau -20
-decalage_larg=larg_carreau -20   
+decalage_larg=larg_carreau -20
+
 
 
 liste_tuiles = os.listdir( 'tuiles/' )
@@ -25,6 +26,7 @@ def afficher_tuiles(liste_num,liste_tuiles,larg_car,haut_car,nbr_car):
     fltk.efface_tout()
     #print(liste_tuiles,len(liste_tuiles))
     fltk.rectangle(100,100,700,700,"pink","pink")
+    fltk.texte(400,70,"choisissez une tuile",'pink','black','center',18)
     for x in range(len(liste_num)):
         for y in range(len(liste_num[x])):
             num_ligne = liste_num[x][y][1]
