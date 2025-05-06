@@ -7,7 +7,7 @@ import time
 hauteur_fenetre = 600 
 largeur_fenetre = 600
 decalage_fenetre = 200
-nbr_carreau = 15
+nbr_carreau = 10
 
 print(hauteur_fenetre)
 hauteur_fenetre=hauteur_fenetre//nbr_carreau*nbr_carreau
@@ -279,39 +279,49 @@ grille_dec = [[None for x in range(nbr_carreau)] for y in range(nbr_carreau)]
 
 def decor(nbr_carreau, hauteur_fenetre, largeur_fenetre, hauteur_carreau, largeur_carreau, list_image):
     grille_dec = [[None for x in range(nbr_carreau)] for y in range(nbr_carreau)]
-    for x in range(1,len(list_image)):
-        for y in range(1,len(list_image[x])):
+    for x in range(0,len(list_image)):
+        for y in range(0,len(list_image[x])):
             fltk.efface('siren' + str(x) + str(y))
 
-    for x in range(1,len(list_image)):
-        for y in range(1,len(list_image[x])):
-            a = [1,2,3,4,5]
+    for x in range(0,len(list_image)):
+        for y in range(0,len(list_image[x])):
+            a = [x for x in range(15)]
             b = random.choice(a)
             if list_image [x][y] == 'SSSS':
-                if b == 2:
-                    c=random.choice(['siren.png','serpent_v2.png'])
+                if b == 2 or b == 3:
+                    c=random.choice(['sieren/siren_e.png','serpent_v2.png','sieren/siren_n.png'])
                     if c == 'siren.png':
-                        fltk.image((y+0.25)*largeur_carreau,(x+0.25)*hauteur_carreau,"decors/mer/"+c, hauteur_carreau//3, largeur_carreau//3, ancrage = 'nw', tag = 'siren'+str(x)+str(y))
+                        fltk.image((y+0.3)*largeur_carreau,(x+0.33)*hauteur_carreau,"decors/mer/"+c, hauteur_carreau//3, largeur_carreau//3, ancrage = 'nw', tag = 'siren'+str(x)+str(y))
                     else :
                         fltk.image((y+0.25)*largeur_carreau,(x+0.25)*hauteur_carreau,"decors/mer/"+c, hauteur_carreau//2, largeur_carreau//2, ancrage = 'nw', tag = 'siren'+str(x)+str(y))
                     grille_dec[x][y] = 'poiscay'
-
-    for x in range(1,len(list_image)):
-        for y in range(1,len(list_image[x])):
-            if list_image [x-1][y-1] == 'SSSS' and list_image[x-1][y] == 'SSSS'and list_image[x][y-1] == 'SSSS'and list_image[x][y] == 'SSSS':
-                if grille_dec [x-1][y-1] == None and grille_dec[x-1][y] == None and grille_dec[x][y-1] == None and grille_dec[x][y] == None:
-
-                    # Charger la liste des décors marins
-                    decorsa = os.listdir('decors/mer/')
-                    decors = []
-                    for dec in decorsa :
-                        if 'wave' not in dec:
-                            decors.append(dec)
-                    a = [1,2,3,4,5]
-                    b = random.choice(a)
-                    if b == 1:
-                        
-                        fltk.image((y-0.25)*largeur_carreau,(x-0.25)*hauteur_carreau,"decors/mer/ship.png", hauteur_carreau, largeur_carreau, ancrage = 'nw', tag = 'siren'+str(x)+str(y))
+                if b == 1:    
+                        fltk.image((y)*largeur_carreau,(x)*hauteur_carreau,"decors/mer/ship_v2.png", int(hauteur_carreau/1.3), int(largeur_carreau/1.3), ancrage = 'nw', tag = 'siren'+str(x)+str(y))
+    
+    for x in range(0,len(list_image)):
+        for y in range(0,len(list_image[x])):
+            #Charger la liste des décors marins
+            decorsa = os.listdir('decors/terre/')
+            decors = []
+            for dec in decorsa :
+                if 'grass' not in dec and 'field' not in dec:
+                    decors.append(dec)
+            
+            if list_image [x][y][3] == 'H' and list_image[x][y][2] == 'P'and list_image[x][y][1] == 'H':
+                print('terre',x,y)
+                fltk.image((y+0.25)*largeur_carreau,(x+0.5)*hauteur_carreau,"decors/terre/"+random.choice(decors), int(hauteur_carreau/2), int(largeur_carreau/2), ancrage = 'nw', tag = 'siren'+str(x)+str(y))
+            
+            if list_image [x][y][0] == 'H' and list_image[x][y][1] == 'P'and list_image[x][y][2] == 'H':
+                print('terre',x,y)
+                fltk.image((y+0.5)*largeur_carreau,(x+0.25)*hauteur_carreau,"decors/terre/"+random.choice(decors), int(hauteur_carreau/2), int(largeur_carreau/2), ancrage = 'nw', tag = 'siren'+str(x)+str(y))
+            
+            if list_image [x][y][3] == 'H' and list_image[x][y][0] == 'P'and list_image[x][y][1] == 'H':
+                print('terre',x,y)
+                fltk.image((y+0.25)*largeur_carreau,(x)*hauteur_carreau,"decors/terre/"+random.choice(decors), int(hauteur_carreau/2), int(largeur_carreau/2), ancrage = 'nw', tag = 'siren'+str(x)+str(y))
+            
+            if list_image [x][y][3] == 'H' and list_image[x][y][2] == 'P'and list_image[x][y][0] == 'H':
+                print('terre',x,y)
+                fltk.image((y)*largeur_carreau,(x+0.25)*hauteur_carreau,"decors/terre/"+random.choice(decors), int(hauteur_carreau/2), int(largeur_carreau/2), ancrage = 'nw', tag = 'siren'+str(x)+str(y))
     
     fltk.mise_a_jour()
 
