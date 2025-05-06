@@ -4,11 +4,11 @@ import os
 import random
 import time
 
-hauteur_fenetre = 800 
-largeur_fenetre = 800
+hauteur_fenetre = 600 
+largeur_fenetre = 600
 decalage_fenetre = 200
 fltk.cree_fenetre(largeur_fenetre, hauteur_fenetre)
-nbr_carreau = 20
+nbr_carreau = 5
 
 # On récupère les dimensions de la fenêtre après sa création
 hauteur_fenetre = fltk.hauteur_fenetre()  # Récupère la hauteur de la fenêtre dynamique
@@ -29,7 +29,7 @@ liste_tuiles = [nom[:-4] for nom in liste_tuiles if nom.endswith('.png') and len
 def afficher_tuiles(liste_num, liste_tuiles, larg_car, haut_car, nbr_car):
     """Affiche les tuiles possibles pour la case cliquée."""
     fltk.efface_tout()
-    fltk.rectangle(100, 100, 700, 700, "pink", "pink")
+    fltk.rectangle(100, 100, hauteur_fenetre-100, largeur_fenetre-100, "pink", "pink")
     for x in range(len(liste_num)):
         for y in range(len(liste_num[x])):
             num_ligne = liste_num[x][y][1]
@@ -124,11 +124,8 @@ def tuiles_possibles(grille,i,j): # i -> colonne; j -> ligne;
         if (tuile[3]==gauche or gauche=='0') and (tuile[1]==droite or droite=='0') and (tuile[0]==haut or haut=='0') and (tuile[2]==bas or bas=='0'):
             list_intermediaire.append(tuile)
 
-
-
     #RRRIIIIVVVIIIEEERRREEE GESTION
     if gauche=='R' or droite=='R' or haut=='R' or bas=='R':
-        print('alerte rivière')
         list_valide=[]
         for z in range(len(list_intermediaire)):
             if 'R' in list_intermediaire[z] and ('D' in list_intermediaire[z] or 'G'  in list_intermediaire[z] or 'B'  in list_intermediaire[z] or 'H'  in list_intermediaire[z]):
@@ -142,7 +139,8 @@ def tuiles_possibles(grille,i,j): # i -> colonne; j -> ligne;
                 pass
             else:
                 list_valide.append(list_intermediaire[z])
-
+   
+   
     lst_finale=[]
     for tuile in list_valide:
         ajout=True
@@ -181,7 +179,7 @@ def tuiles_possibles(grille,i,j): # i -> colonne; j -> ligne;
         if ajout==True:
             lst_finale.append(tuile)
         #FIN RIVIERE GESTION
-
+   
 
     return lst_finale
 
@@ -221,10 +219,24 @@ def solveur2(grille):
     if case == None:
         return True
     i, j, tuiles = case
+    if i== 0 and j ==0 :
+        print(tuiles,len(tuiles))
+    n=0
     random.shuffle(tuiles)
-    
+    if tuiles != []:
+        if 'SSSS' not in tuiles:
+            while n < 10 and 'S' not in tuiles[0]:
+                random.shuffle(tuiles)
+                n+=1
+        elif 'SSSS' in tuiles :
+            a = [1,2,3,4,5]
+            random.shuffle(a)
+            if a[0]!=2:
+                for x in range(len(tuiles)):
+                    if tuiles[x]=='SSSS':
+                        tuiles[x]=tuiles[0]
+                        tuiles[0]='SSSS'
     for tuile in tuiles:
-        
         grille[i][j] = tuile
 
         # Ajoute à la liste
@@ -239,10 +251,11 @@ def solveur2(grille):
 
         #affichage FLTK
         fltk.image(j*largeur_carreau,i*hauteur_carreau,"tuiles_v2/" + tuile + ".png", hauteur_carreau, largeur_carreau, ancrage = 'nw', tag = 'image'+str(j)+str(i))
-        fltk.mise_a_jour()
-        time.sleep(0.01)
+        
+        #time.sleep(0.01)
         #fin affichage FLTK
         if solveur2(grille):
+            
             return True
         grille[i][j] = None
 
@@ -256,6 +269,18 @@ def solveur2(grille):
 
 
 grille_riv = [[None for x in range(nbr_carreau)] for y in range(nbr_carreau)]
+
+def decor(nbr_carreau, hauteur_fenetre, largeur_fenetre, hauteur_carreau, largeur_carreau, list_image):
+    for x in range(len(list_image)):
+        print(list_image[x])
+    for x in range(1,len(list_image)):
+        for y in range(1,len(list_image[x])):
+            if list_image [x-1][y-1]=='SSSS' and list_image[x-1][y]=='SSSS'and list_image[x][y-1]=='SSSS'and list_image[x][y]=='SSSS':
+                # Charger la liste des décors marins
+                decors = os.listdir('decors/mer/')
+                fltk.image((y-0.5)*largeur_carreau,(x-0.5)*hauteur_carreau,"decors/mer/"+random.choice(decors), hauteur_carreau//2, largeur_carreau//2, ancrage = 'nw', tag = 'siren'+str(x)+str(y))
+                fltk.mise_a_jour()
+
 
 
 
@@ -367,6 +392,9 @@ while True:
             #Efface Tout
             list_image = [[None for x in range(nbr_carreau)] for y in range(nbr_carreau)]
             afficher_carte(nbr_carreau, hauteur_fenetre, largeur_fenetre, hauteur_carreau, largeur_carreau)
+
+        elif touche_ev=="d":
+            decor(nbr_carreau, hauteur_fenetre, largeur_fenetre, hauteur_carreau, largeur_carreau,list_image)
 
     if tev == "Quitte":
         print("Fin de partie")
