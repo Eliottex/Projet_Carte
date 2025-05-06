@@ -289,7 +289,11 @@ def decor(nbr_carreau, hauteur_fenetre, largeur_fenetre, hauteur_carreau, largeu
             b = random.choice(a)
             if list_image [x][y] == 'SSSS':
                 if b == 2:
-                    fltk.image((y+0.25)*largeur_carreau,(x+0.25)*hauteur_carreau,"decors/mer/"+random.choice(['siren.png','serpent.png']), hauteur_carreau//2, largeur_carreau//2, ancrage = 'nw', tag = 'siren'+str(x)+str(y))
+                    c=random.choice(['siren.png','serpent_v2.png'])
+                    if c == 'siren.png':
+                        fltk.image((y+0.25)*largeur_carreau,(x+0.25)*hauteur_carreau,"decors/mer/"+c, hauteur_carreau//3, largeur_carreau//3, ancrage = 'nw', tag = 'siren'+str(x)+str(y))
+                    else :
+                        fltk.image((y+0.25)*largeur_carreau,(x+0.25)*hauteur_carreau,"decors/mer/"+c, hauteur_carreau//2, largeur_carreau//2, ancrage = 'nw', tag = 'siren'+str(x)+str(y))
                     grille_dec[x][y] = 'poiscay'
 
     for x in range(1,len(list_image)):
