@@ -7,8 +7,14 @@ import time
 hauteur_fenetre = 600 
 largeur_fenetre = 600
 decalage_fenetre = 200
+nbr_carreau = 15
+
+print(hauteur_fenetre)
+hauteur_fenetre=hauteur_fenetre//nbr_carreau*nbr_carreau
+print(hauteur_fenetre)
+largeur_fenetre=largeur_fenetre//nbr_carreau*nbr_carreau
 fltk.cree_fenetre(largeur_fenetre, hauteur_fenetre)
-nbr_carreau = 5
+
 
 # On récupère les dimensions de la fenêtre après sa création
 hauteur_fenetre = fltk.hauteur_fenetre()  # Récupère la hauteur de la fenêtre dynamique
@@ -269,17 +275,41 @@ def solveur2(grille):
 
 
 grille_riv = [[None for x in range(nbr_carreau)] for y in range(nbr_carreau)]
+grille_dec = [[None for x in range(nbr_carreau)] for y in range(nbr_carreau)]
 
 def decor(nbr_carreau, hauteur_fenetre, largeur_fenetre, hauteur_carreau, largeur_carreau, list_image):
-    for x in range(len(list_image)):
-        print(list_image[x])
+    grille_dec = [[None for x in range(nbr_carreau)] for y in range(nbr_carreau)]
     for x in range(1,len(list_image)):
         for y in range(1,len(list_image[x])):
-            if list_image [x-1][y-1]=='SSSS' and list_image[x-1][y]=='SSSS'and list_image[x][y-1]=='SSSS'and list_image[x][y]=='SSSS':
-                # Charger la liste des décors marins
-                decors = os.listdir('decors/mer/')
-                fltk.image((y-0.5)*largeur_carreau,(x-0.5)*hauteur_carreau,"decors/mer/"+random.choice(decors), hauteur_carreau//2, largeur_carreau//2, ancrage = 'nw', tag = 'siren'+str(x)+str(y))
-                fltk.mise_a_jour()
+            fltk.efface('siren' + str(x) + str(y))
+
+    for x in range(1,len(list_image)):
+        for y in range(1,len(list_image[x])):
+            a = [1,2,3,4,5]
+            b = random.choice(a)
+            if list_image [x][y] == 'SSSS':
+                if b == 2:
+                    fltk.image((y+0.25)*largeur_carreau,(x+0.25)*hauteur_carreau,"decors/mer/"+random.choice(['siren.png','serpent.png']), hauteur_carreau//2, largeur_carreau//2, ancrage = 'nw', tag = 'siren'+str(x)+str(y))
+                    grille_dec[x][y] = 'poiscay'
+
+    for x in range(1,len(list_image)):
+        for y in range(1,len(list_image[x])):
+            if list_image [x-1][y-1] == 'SSSS' and list_image[x-1][y] == 'SSSS'and list_image[x][y-1] == 'SSSS'and list_image[x][y] == 'SSSS':
+                if grille_dec [x-1][y-1] == None and grille_dec[x-1][y] == None and grille_dec[x][y-1] == None and grille_dec[x][y] == None:
+
+                    # Charger la liste des décors marins
+                    decorsa = os.listdir('decors/mer/')
+                    decors = []
+                    for dec in decorsa :
+                        if 'wave' not in dec:
+                            decors.append(dec)
+                    a = [1,2,3,4,5]
+                    b = random.choice(a)
+                    if b == 1:
+                        
+                        fltk.image((y-0.25)*largeur_carreau,(x-0.25)*hauteur_carreau,"decors/mer/ship.png", hauteur_carreau, largeur_carreau, ancrage = 'nw', tag = 'siren'+str(x)+str(y))
+    
+    fltk.mise_a_jour()
 
 
 
