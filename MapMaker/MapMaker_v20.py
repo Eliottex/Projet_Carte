@@ -1,4 +1,3 @@
-print('Hello World !')
 import fltk
 import os
 import random
@@ -10,9 +9,8 @@ largeur_fenetre = 800
 decalage_fenetre = 200
 nbr_carreau = 10
 
-print(hauteur_fenetre)
 hauteur_fenetre=hauteur_fenetre//nbr_carreau*nbr_carreau
-print(hauteur_fenetre)
+
 largeur_fenetre=largeur_fenetre//nbr_carreau*nbr_carreau
 fltk.cree_fenetre(largeur_fenetre, hauteur_fenetre)
 
@@ -184,7 +182,6 @@ def emplacement_valide(grille, i, j, tuile):
     #droite
     if j < len(grille[0])-1 and grille[i][j+1] is not None:
         tuile_voisine = grille[i][j+1]
-        print("ui")
         if tuile_voisine[3] != droite:
             return False
     return True
@@ -365,7 +362,6 @@ def solveur2(grille, dico, coos):
         return True
     i, j, tuiles = case
     if i== 0 and j ==0 :
-        print(tuiles,len(tuiles))
     n=0
     random.shuffle(tuiles)
     if tuiles != []:
@@ -649,7 +645,6 @@ while True:
     menu=menus()
 
     if menu == "map game":
-        print('s')
         choix_jeu=menu_jeu()
         fltk.mise_a_jour()
         if choix_jeu=="creeper":
@@ -775,7 +770,6 @@ while True:
                     num_col = fltk.ordonnee_souris() // hauteur_carreau + coord[0]
                     num_lig = fltk.abscisse_souris() // largeur_carreau + coord[1]
                     if fltk.ordonnee_souris()<=30 and fltk.abscisse_souris()>=largeur_fenetre-30:
-                        print('retour')
                         break
                     elif fltk.ordonnee_souris()<=30 and fltk.abscisse_souris()<=30:
                         case = case_plus_contrainte(list_image)
@@ -830,7 +824,6 @@ while True:
                     y_sup = fltk.ordonnee_souris() // hauteur_carreau + coord[0]
                     x_sup = fltk.abscisse_souris() // largeur_carreau + coord[1]
                     fltk.efface('image' + str(x_sup) + str(y_sup))
-                    print(len(list_image),len(list_image[0]),x_sup,y_sup)
                     list_image[y_sup][x_sup] = None
 
             if tev == "Touche":
@@ -890,7 +883,6 @@ while True:
                                     afficher_carte(nbr_carreau, hauteur_fenetre, largeur_fenetre, hauteur_carreau, largeur_carreau,coord)
                                     decor(nbr_carreau, hauteur_carreau, largeur_carreau,list_image)
                                 else:
-                                    print("impossible de compléter la carte")
                                     fltk.texte(largeur_fenetre // 2, hauteur_fenetre - 20, "carte impossible à compléter", taille=16, couleur='red', ancrage='center')
                         else:
                             afficher_carte(nbr_carreau, hauteur_fenetre, largeur_fenetre, hauteur_carreau, largeur_carreau,coord)
@@ -900,20 +892,16 @@ while True:
                     if touche_ev == "l":
                         num_col = fltk.ordonnee_souris() // hauteur_carreau
                         num_lig = fltk.abscisse_souris() // largeur_carreau
-                        print(list_image[num_col+coord[1]][num_lig+coord[0]])
 
                     elif touche_ev == "s":
-                        print("solveur lancé")
                         dictionr = {}
                         for n in range(len(list_image)):
                             for m in range(len(list_image[n])):
                                 dictionr[str(m)+','+str(n)]=0
                         if solveur2(list_image,dictionr, coord):
-                            print("carte complétée")
                             afficher_carte(nbr_carreau, hauteur_fenetre, largeur_fenetre, hauteur_carreau, largeur_carreau,coord)
                             decor(nbr_carreau, hauteur_carreau, largeur_carreau,list_image)
                         else:
-                            print("impossible de compléter la carte")
                             fltk.texte(largeur_fenetre // 2, hauteur_fenetre - 20, "carte impossible à compléter", taille=16, couleur='red', ancrage='center')
 
                     elif touche_ev=='r':
@@ -938,7 +926,6 @@ while True:
                 
 
             if tev == "Quitte":
-                print("Fin de partie")
                 fltk.ferme_fenetre()
                 break
 
