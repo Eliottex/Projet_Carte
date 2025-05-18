@@ -920,7 +920,7 @@ while True:
 
                     elif touche_ev=="d":
                         decor(nbr_carreau, hauteur_carreau, largeur_carreau,list_image)
-                    #elif touche_ev=="k":
+                  
                         
                         
                 
