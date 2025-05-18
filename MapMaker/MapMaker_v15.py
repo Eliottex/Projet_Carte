@@ -1,4 +1,3 @@
-print('Hello World !')
 import fltk
 import os
 import random
@@ -124,7 +123,6 @@ mode = 'choisir_case'
 
 quad(nbr_carreau, hauteur_fenetre, largeur_fenetre, hauteur_carreau, largeur_carreau)
 
-""" Partie de Nesma (A NE PAS TOUCHER) """
 def case_vide(grille):
     """Renvoie la liste des cases vides (None) dans la liste grille.
     
