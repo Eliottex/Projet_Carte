@@ -438,9 +438,8 @@ def menu():
             break
     fltk.image(0, 0, "menu2.png", 800, 800, "nw")
     fltk.mise_a_jour()
-    fltk.texte(308, 340, "MAP MAKER", "#32683f",police="Yellow Style")
-    fltk.texte(312, 470, "MAP GAME", "#32683f")
-    fltk.texte(330, 594, "QUITTER", "#32683f")
+    fltk.image(0,0,"textemenu1.png",800,800,"nw")
+    fltk.mise_a_jour()
 
     # Coordonnées pour les zones cliquables
     while True:
@@ -468,10 +467,7 @@ def menu():
 def menu_jeu():
     fltk.image(0, 0, "menu3.png", 800, 800, "nw")
     fltk.mise_a_jour()
-    fltk.texte(130,300,"CHASSE AU")
-    fltk.texte(140,350,"CREEPER")
-    fltk.texte(480,300,"DROIT VERS")
-    fltk.texte(490,350,"LE PHARE")
+    fltk.image(0, 0, "textemenu2.png", 800, 800, "nw")
     fltk.mise_a_jour()
 
 
@@ -500,8 +496,7 @@ def menu_jeu():
 def menu_bat_joueur():
     fltk.image(0, 0, "menub1.png", 800, 800, "nw")
     fltk.mise_a_jour()
-    fltk.texte(140,360,"2 JOUEURS")
-    fltk.texte(490,360,"3 JOUEURS")  
+    fltk.image(0, 0, "textemenub1.png", 800, 800, "nw")
     fltk.mise_a_jour()
     # Coordonnées pour les zones cliquables
     while True:
