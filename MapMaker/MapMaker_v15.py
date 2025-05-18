@@ -529,6 +529,36 @@ def menu():
     fltk.texte(308, 340, "MAP MAKER", "#32683f")
     fltk.texte(312, 470, "MAP GAME", "#32683f")
     fltk.texte(330, 594, "QUITTER", "#32683f")
+"""
+def menu_jeu():
+    fltk.efface_tout()
+    fltk.mise_a_jour()
+    fltk.image(0, 0, "menu3.png", 800, 800, "nw")
+    fltk.mise_a_jour()
+    while True:
+        ev = fltk.donne_ev()
+        tev = fltk.type_ev(ev)
+        if tev == "ClicGauche":
+            break
+        
+        elif tev == "Quitte":
+            fltk.ferme_fenetre()
+            exit()
+        fltk.texte(250, 500, "cliquez sur une touche", "#c86598")
+        fltk.mise_a_jour()
+        time.sleep(0.5)
+        fltk.texte(250, 500, "cliquez sur une touche", "#32683f")
+        fltk.mise_a_jour()
+        time.sleep(0.5)
+        fltk.mise_a_jour()
+    #time.sleep(2)
+    fltk.image(0, 0, "menu2.png", 800, 800, "nw")
+    fltk.mise_a_jour()
+    fltk.texte(308, 340, "MAP MAKER", "#32683f")
+    fltk.texte(312, 470, "MAP GAME", "#32683f")
+    fltk.texte(330, 594, "QUITTER", "#32683f")
+
+
 
     # Coordonnées pour les zones cliquables
     while True:
@@ -553,7 +583,7 @@ def menu():
             exit()
 
         fltk.mise_a_jour()
-
+"""
 coord=(0,0)
 completion='auto'
 

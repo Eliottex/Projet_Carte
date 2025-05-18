@@ -438,7 +438,7 @@ def menu():
             break
     fltk.image(0, 0, "menu2.png", 800, 800, "nw")
     fltk.mise_a_jour()
-    fltk.texte(308, 340, "MAP MAKER", "#32683f")
+    fltk.texte(308, 340, "MAP MAKER", "#32683f",police="Yellow Style")
     fltk.texte(312, 470, "MAP GAME", "#32683f")
     fltk.texte(330, 594, "QUITTER", "#32683f")
 
@@ -464,6 +464,67 @@ def menu():
 
         fltk.mise_a_jour()
 
+
+def menu_jeu():
+    fltk.image(0, 0, "menu3.png", 800, 800, "nw")
+    fltk.mise_a_jour()
+    fltk.texte(130,300,"CHASSE AU")
+    fltk.texte(140,350,"CREEPER")
+    fltk.texte(480,300,"DROIT VERS")
+    fltk.texte(490,350,"LE PHARE")
+    fltk.mise_a_jour()
+
+
+    # Coordonnées pour les zones cliquables
+    while True:
+        ev = fltk.donne_ev()
+        tev = fltk.type_ev(ev)
+        if tev == "ClicGauche":
+            x = fltk.abscisse(ev)
+            y = fltk.ordonnee(ev)
+            # Zone du texte "CHASSE AU CREEPER"
+            if 100 <= x <= 350 and 300 <= y <= 400:
+                return "creeper"
+
+            # Zone du texte "DROIT VERS LE PHARE"
+            elif 450 <= x <= 700 and 300 <= y <= 400:
+                return "bateau"
+
+        elif tev == "Quitte":
+            fltk.ferme_fenetre()
+            exit()
+
+        fltk.mise_a_jour()
+
+
+def menu_bat_joueur():
+    fltk.image(0, 0, "menub1.png", 800, 800, "nw")
+    fltk.mise_a_jour()
+    fltk.texte(140,360,"2 JOUEURS")
+    fltk.texte(490,360,"3 JOUEURS")  
+    fltk.mise_a_jour()
+    # Coordonnées pour les zones cliquables
+    while True:
+        ev = fltk.donne_ev()
+        tev = fltk.type_ev(ev)
+        if tev == "ClicGauche":
+            x = fltk.abscisse(ev)
+            y = fltk.ordonnee(ev)
+            # Zone du texte "CHASSE AU CREEPER"
+            if 90 <= x <= 370 and 325 <= y <= 420:
+                return "2"
+
+            # Zone du texte "DROIT VERS LE PHARE"
+            elif 450 <= x <= 720 and 325 <= y <= 420:
+                return "3"
+
+        elif tev == "Quitte":
+            fltk.ferme_fenetre()
+            exit()
+
+        fltk.mise_a_jour()
+
+
 coord=(0,0)
 completion='auto'
 
@@ -471,19 +532,86 @@ menu=menu()
 
 if menu == "map game":
     print('s')
-    fltk.efface_tout()
-    fltk.texte(312,400,"CREEPER ?")
-    fltk.texte(312,500,"BOATS")
-    while True:
-        ev = fltk.donne_ev()
-        tev = fltk.type_ev(ev) 
-
-        fltk.mise_a_jour()
-        if tev == "ClicGauche":
-            pass
-        elif tev == "Quitte":
-            fltk.ferme_fenetre()
-            exit()
+    choix_jeu=menu_jeu()
+    fltk.mise_a_jour()
+    if choix_jeu=="creeper":
+        pass
+    elif choix_jeu=="bateau":
+        choix_joueur=menu_bat_joueur()
+        if choix_joueur=="2":
+            fltk.efface_tout()
+            fltk.image(0,0,"phare.png",800,800,"nw")
+            x=60
+            y=0
+            i=0
+            fltk.image (x,300,"ship1.png",100,100,tag="ship1")
+            fltk.image (x,500,"ship2.png",100,100,tag="ship2")
+            fltk.mise_a_jour()
+            fltk.texte(30,100,"joueur 1: cliquez sur n !","white")
+            fltk.texte(30,700,"joueur 2: cliquez sur w !","white")
+            
+            fltk.mise_a_jour()
+            while True:
+                ev = fltk.donne_ev()
+                tev = fltk.type_ev(ev)
+                if tev == "Touche":
+                    touche_ev = fltk.touche(ev)
+                    if touche_ev == "n":
+                        fltk.deplace ("ship1",7,0) 
+                        i+=1
+                        if i>85:
+                            fltk.image(0,0,"winner1.png",800,800,"nw")
+                            fltk.mise_a_jour()
+                    if touche_ev == "w":
+                        fltk.deplace ("ship2",7,0)
+                        y+=1
+                        if y>85:
+                            fltk.image(0,0,"winner2.png",800,800,"nw")
+                            fltk.mise_a_jour()
+        if choix_joueur=="3":
+            fltk.efface_tout()
+            fltk.image(0,0,"phare.png",800,800,"nw")
+            x=60
+            y=0
+            o=0
+            i=0
+            fltk.image (x,200,"ship1.png",100,100,tag="ship1")
+            fltk.image (x,400,"ship2.png",100,100,tag="ship2")
+            fltk.image (x,600,"ship3.png",100,100,tag="ship3")
+            fltk.mise_a_jour()
+            fltk.texte(30,100,"joueur 1: cliquez sur n !","white")
+            fltk.texte(30,300,"joueur 2: cliquez sur w !","white")
+            fltk.texte(30,500,"joueur 3: cliquez sur p !","white")
+            
+            fltk.mise_a_jour()
+            while True:
+                ev = fltk.donne_ev()
+                tev = fltk.type_ev(ev)
+                if tev == "Touche":
+                    touche_ev = fltk.touche(ev)
+                    if touche_ev == "n":
+                        fltk.deplace ("ship1",7,0) 
+                        i+=1
+                        if i>85:
+                            fltk.image(0,0,"winner1.png",800,800,"nw")
+                            fltk.mise_a_jour()
+                    if touche_ev == "w":
+                        fltk.deplace ("ship2",7,0)
+                        y+=1
+                        if y>85:
+                            fltk.image(0,0,"winner2.png",800,800,"nw")
+                            fltk.mise_a_jour()
+                    if touche_ev =="p":
+                        fltk.deplace ("ship3",7,0)
+                        o+=1
+                        if o>85:
+                            fltk.image(0,0,"winner3.png",800,800,"nw")
+                            fltk.mise_a_jour()
+                elif tev == "Quitte":
+                    fltk.ferme_fenetre()
+                    exit()
+                fltk.mise_a_jour()
+            
 
 
 elif menu == "map maker":
