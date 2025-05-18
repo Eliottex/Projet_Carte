@@ -33,6 +33,18 @@ decalage_larg = largeur_carreau - decalage_fenetre//nbr_carreau
 liste_tuiles = os.listdir('tuiles_v2/')
 liste_tuiles = [nom[:-4] for nom in liste_tuiles if nom.endswith('.png') and len(nom[:-4]) == 4]
 
+#Créer les grilles pour les décors et les rivières
+grille_riv = [[None for x in range(nbr_carreau)] for y in range(nbr_carreau)]
+grille_dec = [[None for x in range(nbr_carreau)] for y in range(nbr_carreau)]
+grille_dec_milieu = [[None for x in range(nbr_carreau)] for y in range(nbr_carreau)]
+
+# Liste des images de tuiles
+list_image = [[None for x in range(nbr_carreau)] for y in range(nbr_carreau)]
+
+# Mode de sélection
+mode = 'choisir_case'
+
+
 def bouton_indice():
     fltk.rectangle(0, 0, 30, 30, "yellow", "yellow")
     fltk.texte(10,-5,'i',police=10)
@@ -109,7 +121,7 @@ def afficher_carte(nbr_car, haut_fenetre, larg_fenetre, haut_car, larg_car, coos
     bouton_retour(haut_fenetre,larg_fenetre)
     bouton_indice()
 
-def afficher_decors(nbr_car, haut_car, larg_car, coos=(0,0)):
+def afficher_decors(nbr_car, haut_car, larg_car,coos=(0,0)):
     """Affiche les décors.
     
     Paramètres :
@@ -126,16 +138,10 @@ def afficher_decors(nbr_car, haut_car, larg_car, coos=(0,0)):
             if grille_dec[x][y] != None and grille_dec[x][y] != 'vu':
                 fltk.image((y-coos[1]+grille_dec[x][y][0][0]) * larg_car, (x-coos[0]+grille_dec[x][y][0][1]) * haut_car, grille_dec[x][y][1], int(haut_car/grille_dec[x][y][2]), int(larg_car/grille_dec[x][y][2]), ancrage=grille_dec[x][y][3], tag='image' + str(y) + str(x))
             if grille_dec_milieu[x][y] != None and grille_dec_milieu[x][y] != 'vu':
-                fltk.image((y-coos[1]+grille_dec_milieu[x][y][0][0]) * larg_car, (x-coos[0]+grille_dec_milieu[x][y][0][1]) * long_car, grille_dec_milieu[x][y][1], int(long_car/grille_dec_milieu[x][y][2]), int(larg_car/grille_dec_milieu[x][y][2]), ancrage=grille_dec_milieu[x][y][3], tag='image' + str(y) + str(x))
+                fltk.image((y-coos[1]+grille_dec_milieu[x][y][0][0]) * larg_car, (x-coos[0]+grille_dec_milieu[x][y][0][1]) * haut_car, grille_dec_milieu[x][y][1], int(haut_car/grille_dec_milieu[x][y][2]), int(larg_car/grille_dec_milieu[x][y][2]), ancrage=grille_dec_milieu[x][y][3], tag='image' + str(y) + str(x))
 
 
-# Liste des images de tuiles
-list_image = [[None for x in range(nbr_carreau)] for y in range(nbr_carreau)]
 
-# Mode de sélection
-mode = 'choisir_case'
-
-quad(nbr_carreau, hauteur_fenetre, largeur_fenetre, hauteur_carreau, largeur_carreau)
 
 """ Partie de Nesma (A NE PAS TOUCHER) """
 def case_vide(grille):
@@ -405,9 +411,7 @@ def solveur2(grille, dico, coos):
 
 
 
-grille_riv = [[None for x in range(nbr_carreau)] for y in range(nbr_carreau)]
-grille_dec = [[None for x in range(nbr_carreau)] for y in range(nbr_carreau)]
-grille_dec_milieu = [[None for x in range(nbr_carreau)] for y in range(nbr_carreau)]
+
 
 def decor(nbr_carreau, hauteur_carreau, largeur_carreau, list_image):
     """Détermine les décors dans la mer et sur la terre.
@@ -520,7 +524,7 @@ def decor(nbr_carreau, hauteur_carreau, largeur_carreau, list_image):
                             grille_dec_milieu[x][y]='vu'
 
     #Appelle la fonction afficher_decors qui affiche les décors à partir des listes globales grille_dec et grille_dec_milieu
-    afficher_decors(nbr_carreau, hauteur_carreau, largeur_carreau, coord)
+    afficher_decors(nbr_carreau, hauteur_carreau, largeur_carreau,coord)
 
 
 def menus():
@@ -582,7 +586,7 @@ def menus():
 
 coord=(0,0)
 completion='auto'
-
+quad(nbr_carreau, hauteur_fenetre, largeur_fenetre, hauteur_carreau, largeur_carreau)
 
 
 
