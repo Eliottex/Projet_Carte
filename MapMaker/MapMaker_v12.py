@@ -4,8 +4,8 @@ import os
 import random
 import time
 
-hauteur_fenetre = 900 
-largeur_fenetre = 900
+hauteur_fenetre = 800 
+largeur_fenetre = 800
 decalage_fenetre = 200
 nbr_carreau = 10
 
