@@ -4,6 +4,7 @@ import os
 import random
 import time
 
+
 hauteur_fenetre = 800 
 largeur_fenetre = 800
 decalage_fenetre = 200
@@ -419,191 +420,261 @@ def decor(nbr_carreau, hauteur_fenetre, largeur_fenetre, hauteur_carreau, largeu
     afficher_decors(nbr_carreau, hauteur_carreau, largeur_carreau, coord)
 
 
+def menu():
+    fltk.efface_tout()
+    fltk.mise_a_jour()
+    fltk.image(0, 0, "menu1.png", 800, 800, "nw")
+    fltk.mise_a_jour()
+    #time.sleep(2)
+    fltk.image(0, 0, "menu2.png", 800, 800, "nw")
+    fltk.mise_a_jour()
+    fltk.texte(308, 340, "MAP MAKER", "#32683f")
+    fltk.texte(312, 470, "MAP GAME", "#32683f")
+    fltk.texte(330, 594, "QUITTER", "#32683f")
+
+    # Coordonnées pour les zones cliquables
+    while True:
+        ev = fltk.donne_ev()
+        tev = fltk.type_ev(ev)
+        if tev == "ClicGauche":
+            x = fltk.abscisse(ev)
+            y = fltk.ordonnee(ev)
+            # MAP MAKER (autour de 308, 340)
+            if 290 <= x <= 510 and 320 <= y <= 400:
+                return "map maker"
+            # MAP GAME (autour de 312, 470)
+            elif 290 <= x <= 510 and 450 <= y <= 530:
+                return "map game"
+            # QUITTER (autour de 330, 594)
+            elif 290 <= x <= 510 and 570 <= y <= 610:
+                return "quitter"
+        elif tev == "Quitte":
+            fltk.ferme_fenetre()
+            exit()
+
+        fltk.mise_a_jour()
+
 coord=(0,0)
 completion='auto'
 
-while True:
-    ev = fltk.donne_ev()
-    tev = fltk.type_ev(ev) 
 
-    if tev == "Scroll" or tev == "Up" or tev == "Down":
-        if mode == 'choisir_tuile':
-            if tev == "Scroll":
-                direction = int(fltk.attribut(ev, "delta") / 120)
-            elif tev == "Up":
-                direction = 1
-            elif tev == "Down":
-                direction = -1
-            # Scroll vers le haut en décalant les images
-            if liste_num_affichage[0][0][0] != 0 and direction == 1:
-                for x in range(len(liste_num_affichage)):
-                    for y in range(len(liste_num_affichage[x])):
-                        lig = liste_num_affichage[x][y][1]
-                        col = liste_num_affichage[x][y][0]
-                        liste_num_affichage[x][y] = (col - direction, lig)
-            # Scroll vers le bas en décalant les images            
-            if liste_num_affichage[-1][-1][0] < (len(list_valide) // nbr_carreau) and direction == -1:
-                for x in range(len(liste_num_affichage)):
-                    for y in range(len(liste_num_affichage[x])):
-                        lig = liste_num_affichage[x][y][1]
-                        col = liste_num_affichage[x][y][0]
-                        liste_num_affichage[x][y] = (col - direction, lig)
+"""fltk.efface_tout()
+fltk.mise_a_jour()
+fltk.image(0,0,"menu1.png",800,800,"nw")
+fltk.mise_a_jour()
+time.sleep(2)
+fltk.mise_a_jour()
+fltk.image(0,0,"menu2.png",800,800,"nw")
+fltk.mise_a_jour()
+fltk.texte(308,340,"MAP MAKER","#32683f")
+fltk.texte(312,470,"MAP GAME","#32683f")
+fltk.texte(330,594,"QUITTER","#32683f")
+fltk.texte(250, 500, "cliquez sur une touche", "#c86598")
+fltk.mise_a_jour()
+time.sleep(0.5)
+fltk.texte(250, 500, "cliquez sur une touche", "#32683f")
+fltk.mise_a_jour()
+time.sleep(0.5)"""
 
-            # Affiche la nouvelle liste d'image (avec décalage du scroll)
-            afficher_tuiles(liste_num_affichage, list_valide, largeur_carreau, hauteur_carreau, nbr_carreau)
+menu=menu()
 
-    if tev == "ClicGauche":
-        if mode == 'choisir_case':
-            # Récupère les coordonnées de la case cliquée
-            num_col = fltk.ordonnee_souris() // hauteur_carreau
-            num_lig = fltk.abscisse_souris() // largeur_carreau
 
-            list_valide = tuiles_possibles(list_image,num_col,num_lig)
+if menu == "map game":
+    fltk.efface_tout()
+    fltk.mise_a_jour()
+    fltk.texte(312,400,"CREEPER ?")
+    fltk.texte(312,500,"BOATS")
 
-            # Si il y a au moins une case valide, affiche tous les tuiles possibles
-            if list_valide != []:
-                liste_num_affichage = [[(y, x) for x in range(nbr_carreau)] for y in range(nbr_carreau)]
+
+elif menu == "map maker":
+
+    while True:
+        ev = fltk.donne_ev()
+        tev = fltk.type_ev(ev) 
+
+        if tev == "Scroll" or tev == "Up" or tev == "Down":
+            if mode == 'choisir_tuile':
+                if tev == "Scroll":
+                    direction = int(fltk.attribut(ev, "delta") / 120)
+                elif tev == "Up":
+                    direction = 1
+                elif tev == "Down":
+                    direction = -1
+                # Scroll vers le haut en décalant les images
+                if liste_num_affichage[0][0][0] != 0 and direction == 1:
+                    for x in range(len(liste_num_affichage)):
+                        for y in range(len(liste_num_affichage[x])):
+                            lig = liste_num_affichage[x][y][1]
+                            col = liste_num_affichage[x][y][0]
+                            liste_num_affichage[x][y] = (col - direction, lig)
+                # Scroll vers le bas en décalant les images            
+                if liste_num_affichage[-1][-1][0] < (len(list_valide) // nbr_carreau) and direction == -1:
+                    for x in range(len(liste_num_affichage)):
+                        for y in range(len(liste_num_affichage[x])):
+                            lig = liste_num_affichage[x][y][1]
+                            col = liste_num_affichage[x][y][0]
+                            liste_num_affichage[x][y] = (col - direction, lig)
+
+                # Affiche la nouvelle liste d'image (avec décalage du scroll)
                 afficher_tuiles(liste_num_affichage, list_valide, largeur_carreau, hauteur_carreau, nbr_carreau)
-                mode = 'choisir_tuile'
 
-        elif mode == 'choisir_tuile':
-            # Récupère les coordonnées de la tuile cliquée
-            x = fltk.ordonnee_souris() 
-            y = fltk.abscisse_souris() 
-            
-            #Les 3 lignes suivantes résolvent le problème de clics décalés sur la fenêtre de choix
-            if x> decalage_fenetre//2 and y > decalage_fenetre//2 and x<hauteur_fenetre-decalage_fenetre//2 and y<largeur_fenetre-decalage_fenetre//2:
-                x = int((x-decalage_fenetre//2)/(hauteur_fenetre-decalage_fenetre)*hauteur_fenetre//hauteur_carreau)
-                y = int((y-decalage_fenetre//2)/(largeur_fenetre-decalage_fenetre)*largeur_fenetre//largeur_carreau)
+        if tev == "ClicGauche":
+            if mode == 'choisir_case':
+                # Récupère les coordonnées de la case cliquée
+                num_col = fltk.ordonnee_souris() // hauteur_carreau
+                num_lig = fltk.abscisse_souris() // largeur_carreau
+
+                list_valide = tuiles_possibles(list_image,num_col,num_lig)
+
+                # Si il y a au moins une case valide, affiche tous les tuiles possibles
+                if list_valide != []:
+                    liste_num_affichage = [[(y, x) for x in range(nbr_carreau)] for y in range(nbr_carreau)]
+                    afficher_tuiles(liste_num_affichage, list_valide, largeur_carreau, hauteur_carreau, nbr_carreau)
+                    mode = 'choisir_tuile'
+
+            elif mode == 'choisir_tuile':
+                # Récupère les coordonnées de la tuile cliquée
+                x = fltk.ordonnee_souris() 
+                y = fltk.abscisse_souris() 
                 
-                if liste_num_affichage[x][y][1] + nbr_carreau * liste_num_affichage[x][y][0] < len(list_valide):
-                    # Définit la nouvelle case
-                    case = list_valide[liste_num_affichage[x][y][1] + nbr_carreau * liste_num_affichage[x][y][0]]
+                #Les 3 lignes suivantes résolvent le problème de clics décalés sur la fenêtre de choix
+                if x> decalage_fenetre//2 and y > decalage_fenetre//2 and x<hauteur_fenetre-decalage_fenetre//2 and y<largeur_fenetre-decalage_fenetre//2:
+                    x = int((x-decalage_fenetre//2)/(hauteur_fenetre-decalage_fenetre)*hauteur_fenetre//hauteur_carreau)
+                    y = int((y-decalage_fenetre//2)/(largeur_fenetre-decalage_fenetre)*largeur_fenetre//largeur_carreau)
+                    
+                    if liste_num_affichage[x][y][1] + nbr_carreau * liste_num_affichage[x][y][0] < len(list_valide):
+                        # Définit la nouvelle case
+                        case = list_valide[liste_num_affichage[x][y][1] + nbr_carreau * liste_num_affichage[x][y][0]]
 
-                    # Ajoute à la liste
-                    list_image[num_col][num_lig] = case    
+                        # Ajoute à la liste
+                        list_image[num_col][num_lig] = case    
 
-                    #rivière
-                    if 'R' in case:
-                        grille_riv[num_col][num_lig] = 'end'
-                    else :
-                        grille_riv[num_col][num_lig] = '0'
+                        #rivière
+                        if 'R' in case:
+                            grille_riv[num_col][num_lig] = 'end'
+                        else :
+                            grille_riv[num_col][num_lig] = '0'
 
+                        
+
+                        # Réaffiche la carte
+                        afficher_carte(nbr_carreau, hauteur_fenetre, largeur_fenetre, hauteur_carreau, largeur_carreau)
+
+                        # Change le mode pour choisir une nouvelle case
+                        mode = 'choisir_case'
+
+        if tev == "ClicDroit":
+            if mode == 'choisir_case':
+                # Récupère les coordonnées de la case à supprimer
+                y_sup = fltk.ordonnee_souris() // hauteur_carreau
+                x_sup = fltk.abscisse_souris() // largeur_carreau
+                fltk.efface('image' + str(x_sup) + str(y_sup))
+                list_image[y_sup][x_sup] = None
+
+        if tev == "Touche":
+            touche_ev = fltk.touche(ev)
+            print(touche_ev)
+
+
+            if touche_ev == "Up":
+                if coord[0]==0:
+                    grille_dec.insert(0,[None for x in range(len(list_image[-1]))])
+                    grille_dec_milieu.insert(0,[None for x in range(len(list_image[-1]))])
+                    grille_riv.insert(0,[None for x in range(len(list_image[-1]))])
+                    list_image.insert(0,[None for x in range(len(list_image[-1]))])
+                    
+                else:
+                    coord=(coord[0]-1,coord[1])
                     
 
-                    # Réaffiche la carte
-                    afficher_carte(nbr_carreau, hauteur_fenetre, largeur_fenetre, hauteur_carreau, largeur_carreau)
-
-                    # Change le mode pour choisir une nouvelle case
-                    mode = 'choisir_case'
-
-    if tev == "ClicDroit":
-        if mode == 'choisir_case':
-            # Récupère les coordonnées de la case à supprimer
-            y_sup = fltk.ordonnee_souris() // hauteur_carreau
-            x_sup = fltk.abscisse_souris() // largeur_carreau
-            fltk.efface('image' + str(x_sup) + str(y_sup))
-            list_image[y_sup][x_sup] = None
-
-    if tev == "Touche":
-        touche_ev = fltk.touche(ev)
-        print(touche_ev)
+            if touche_ev == "Down":
+                if coord[0]+nbr_carreau==len(list_image):
+                    grille_dec.append([None for x in range(len(list_image[0]))])
+                    grille_dec_milieu.append([None for x in range(len(list_image[0]))])
+                    grille_riv.append([None for x in range(len(list_image[0]))])
+                    list_image.append([None for x in range(len(list_image[0]))])
+                coord=(coord[0]+1,coord[1])
+                    
 
 
-        if touche_ev == "Up":
-            if coord[0]==0:
-                grille_dec.insert(0,[None for x in range(len(list_image[-1]))])
-                grille_dec_milieu.insert(0,[None for x in range(len(list_image[-1]))])
-                grille_riv.insert(0,[None for x in range(len(list_image[-1]))])
-                list_image.insert(0,[None for x in range(len(list_image[-1]))])
-                
-            else:
-                coord=(coord[0]-1,coord[1])
-                
+            if touche_ev == "Left":
+                if coord[1]==0:
+                    for x in range(len(list_image)):
+                        grille_dec[x].insert(0,None)
+                        grille_dec_milieu[x].insert(0,None)
+                        grille_riv[x].insert(0,None)
+                        list_image[x].insert(0,None)
+                else:
+                    coord=(coord[0],coord[1]-1)
 
-        if touche_ev == "Down":
-            if coord[0]+nbr_carreau==len(list_image):
-                grille_dec.append([None for x in range(len(list_image[0]))])
-                grille_dec_milieu.append([None for x in range(len(list_image[0]))])
-                grille_riv.append([None for x in range(len(list_image[0]))])
-                list_image.append([None for x in range(len(list_image[0]))])
-            coord=(coord[0]+1,coord[1])
+            if touche_ev == "Right":
+                if coord[1]+nbr_carreau==len(list_image[0]):
+                    for x in range(len(list_image)):
+                        grille_dec[x].append(None)
+                        grille_dec_milieu[x].append(None)
+                        grille_riv[x].append(None)
+                        list_image[x].append(None)
+                coord=(coord[0],coord[1]+1)
+                    
                 
 
+            if touche_ev in ['Up','Down','Left','Right']:
+                if completion=='auto':
+                        dictionr = {}
+                        for n in range(len(list_image)):
+                            for m in range(len(list_image[n])):
+                                dictionr[str(m)+','+str(n)]=0
+                        if solveur2(list_image,dictionr, coord):
+                            print("carte complétée")
+                            afficher_carte(nbr_carreau, hauteur_fenetre, largeur_fenetre, hauteur_carreau, largeur_carreau,coord)
+                            decor(nbr_carreau, hauteur_fenetre, largeur_fenetre, hauteur_carreau, largeur_carreau,list_image)
+                        else:
+                            print("impossible de compléter la carte")
+                            fltk.texte(largeur_fenetre // 2, hauteur_fenetre - 20, "carte impossible à compléter", taille=16, couleur='red', ancrage='center')
+                else:
+                    afficher_carte(nbr_carreau, hauteur_fenetre, largeur_fenetre, hauteur_carreau, largeur_carreau,coord)
+                    decor(nbr_carreau, hauteur_fenetre, largeur_fenetre, hauteur_carreau, largeur_carreau,list_image)
 
-        if touche_ev == "Left":
-            if coord[1]==0:
-                for x in range(len(list_image)):
-                    grille_dec[x].insert(0,None)
-                    grille_dec_milieu[x].insert(0,None)
-                    grille_riv[x].insert(0,None)
-                    list_image[x].insert(0,None)
-            else:
-                coord=(coord[0],coord[1]-1)
 
-        if touche_ev == "Right":
-            if coord[1]+nbr_carreau==len(list_image[0]):
-                for x in range(len(list_image)):
-                    grille_dec[x].append(None)
-                    grille_dec_milieu[x].append(None)
-                    grille_riv[x].append(None)
-                    list_image[x].append(None)
-            coord=(coord[0],coord[1]+1)
-                
+            if touche_ev == "l":
+                num_col = fltk.ordonnee_souris() // hauteur_carreau
+                num_lig = fltk.abscisse_souris() // largeur_carreau
+                print(list_image[num_col][num_lig])
+
+            elif touche_ev == "s":
+                print("solveur lancé")
+                dictionr = {}
+                for n in range(len(list_image)):
+                    for m in range(len(list_image[n])):
+                        dictionr[str(m)+','+str(n)]=0
+                if solveur2(list_image,dictionr, coord):
+                    print("carte complétée")
+                    afficher_carte(nbr_carreau, hauteur_fenetre, largeur_fenetre, hauteur_carreau, largeur_carreau,coord)
+                    decor(nbr_carreau, hauteur_fenetre, largeur_fenetre, hauteur_carreau, largeur_carreau,list_image)
+                else:
+                    print("impossible de compléter la carte")
+                    fltk.texte(largeur_fenetre // 2, hauteur_fenetre - 20, "carte impossible à compléter", taille=16, couleur='red', ancrage='center')
+
+            elif touche_ev=='r':
+                for tab in grille_riv:
+                    print(tab)
+
+            elif touche_ev=='m':
+                #Efface Tout
+                list_image = [[None for x in range(nbr_carreau)] for y in range(nbr_carreau)]
+                afficher_carte(nbr_carreau, hauteur_fenetre, largeur_fenetre, hauteur_carreau, largeur_carreau)
+
+            elif touche_ev=="d":
+                decor(nbr_carreau, hauteur_fenetre, largeur_fenetre, hauteur_carreau, largeur_carreau,list_image)
+            #elif touche_ev=="k":
+                    
+                    
             
 
-        if touche_ev in ['Up','Down','Left','Right']:
-            if completion=='auto':
-                    dictionr = {}
-                    for n in range(len(list_image)):
-                        for m in range(len(list_image[n])):
-                            dictionr[str(m)+','+str(n)]=0
-                    if solveur2(list_image,dictionr, coord):
-                        print("carte complétée")
-                        afficher_carte(nbr_carreau, hauteur_fenetre, largeur_fenetre, hauteur_carreau, largeur_carreau,coord)
-                        decor(nbr_carreau, hauteur_fenetre, largeur_fenetre, hauteur_carreau, largeur_carreau,list_image)
-                    else:
-                        print("impossible de compléter la carte")
-                        fltk.texte(largeur_fenetre // 2, hauteur_fenetre - 20, "carte impossible à compléter", taille=16, couleur='red', ancrage='center')
-            else:
-                afficher_carte(nbr_carreau, hauteur_fenetre, largeur_fenetre, hauteur_carreau, largeur_carreau,coord)
-                decor(nbr_carreau, hauteur_fenetre, largeur_fenetre, hauteur_carreau, largeur_carreau,list_image)
+        if tev == "Quitte":
+            print("Fin de partie")
+            fltk.ferme_fenetre()
+            break
 
+        fltk.mise_a_jour()
 
-        if touche_ev == "l":
-            num_col = fltk.ordonnee_souris() // hauteur_carreau
-            num_lig = fltk.abscisse_souris() // largeur_carreau
-            print(list_image[num_col][num_lig])
-
-        elif touche_ev == "s":
-            print("solveur lancé")
-            dictionr = {}
-            for n in range(len(list_image)):
-                for m in range(len(list_image[n])):
-                    dictionr[str(m)+','+str(n)]=0
-            if solveur2(list_image,dictionr, coord):
-                print("carte complétée")
-                afficher_carte(nbr_carreau, hauteur_fenetre, largeur_fenetre, hauteur_carreau, largeur_carreau,coord)
-                decor(nbr_carreau, hauteur_fenetre, largeur_fenetre, hauteur_carreau, largeur_carreau,list_image)
-            else:
-                print("impossible de compléter la carte")
-                fltk.texte(largeur_fenetre // 2, hauteur_fenetre - 20, "carte impossible à compléter", taille=16, couleur='red', ancrage='center')
-
-        elif touche_ev=='r':
-            for tab in grille_riv:
-                print(tab)
-
-        elif touche_ev=='m':
-            #Efface Tout
-            list_image = [[None for x in range(nbr_carreau)] for y in range(nbr_carreau)]
-            afficher_carte(nbr_carreau, hauteur_fenetre, largeur_fenetre, hauteur_carreau, largeur_carreau)
-
-        elif touche_ev=="d":
-            decor(nbr_carreau, hauteur_fenetre, largeur_fenetre, hauteur_carreau, largeur_carreau,list_image)
-
-    if tev == "Quitte":
-        print("Fin de partie")
-        fltk.ferme_fenetre()
-        break
-
-    fltk.mise_a_jour()
